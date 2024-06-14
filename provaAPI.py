@@ -26,33 +26,35 @@ monitoring_enabled = False
 lost_tag = '2Q9992ULV'
 
 @coc.ClanEvents.member_join()
-async def foo(player, clan):
+async def on_member_join():
     if monitoring_enabled:
         message = f"{player.name} ({player.tag}) just joined {clan.name} ({clan.tag})"
         print(message)  # Stampa per debugging
         await bot.send_message(chat_id=CHAT_ID, text=message)  # Invio del messaggio su Telegram
-
-@coc.ClanEvents.member_donations()
-async def bar(old_member, member):
+# Evento di uscita di un membro dal clan
+@coc.ClanEvents.member_leave()
+async def on_member_leave(player, clan):
     if monitoring_enabled:
-        troops_donated = member.donations - old_member.donations
-        message = f"{member.name} just donated {troops_donated} troops!"
+        message = f"{player.name} ({player.tag}) è uscito {clan.name} ({clan.tag})"
         print(message)  # Stampa per debugging
         await bot.send_message(chat_id=CHAT_ID, text=message)  # Invio del messaggio su Telegram
+
 
 async def coc_event_listener():
     coc_client = coc.EventsClient()
     try:
-        await coc.login("fedestefanini@gmail.com", ".pamyMZ#u5ivP3@")
+        await coc_client.login("fedestefanini@gmail.com", ".pamyMZ#u5ivP3@")
     except coc.InvalidCredentials as error:
         exit(error)
 
-    list_of_clan_tags = ["#2Q9992ULV", "2Q9992ULV"]
+    # Registra tutti i clan che vuoi monitorare
+    list_of_clan_tags = ["#2Q9992ULV"]
     coc_client.add_clan_updates(*list_of_clan_tags)
-
-    coc_client.add_events(foo, bar)
-    await coc_client.start()
-
+    
+    coc_client.add_events(
+        on_member_join,
+        on_member_leave,
+    )
 '''/lost'''
 def get_clan_info(tag):
     headers = {
@@ -192,8 +194,13 @@ if __name__ == "__main__":
     log = logging.getLogger()
 
     try:
-        asyncio.run(coc_event_listener())
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    try:
+        loop.run_until_complete(main())
+        loop.run_forever()
     except KeyboardInterrupt:
         pass
-
-    main()
