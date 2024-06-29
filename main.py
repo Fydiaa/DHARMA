@@ -7,6 +7,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler, CallbackContext
 import requests
 from datetime import datetime, timedelta
+from admin import admin_required
 import asyncio
 from functools import wraps
 from login import login, login_required
@@ -90,7 +91,7 @@ async def welcome(update: Update, context: CallbackContext) -> None:
                 "Digita /help per la lista comandi!\n\n"
                 "❗️*Comunica alla chat il tuo nome su Clash*❗️\n\n"
                 "Per utilizzarmi in chat privata dovrai loggarti con una password e con il seguente comando:\n"
-                "*'/login desmondcaposupremo'*"
+                "*'/login ||desmondcaposupremo||'*"
             )
         else:
             welcome_message = (
@@ -98,7 +99,7 @@ async def welcome(update: Update, context: CallbackContext) -> None:
                 "Digita /help per la lista comandi!\n\n"
                 "❗️*Comunica alla chat il tuo nome su Clash*❗️\n\n"
                 "Per utilizzarmi in chat privata dovrai loggarti con una password e con il seguente comando:\n"
-                "*'/login desmondcaposupremo'*"
+                "*'/login ||desmondcaposupremo||'*"
             )
 
         with open("benvenuto.png", "rb") as photo:
@@ -139,6 +140,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text(message, parse_mode="Markdown")
     
 #/info
+@login_required
 async def infobot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = (
     "⚡*Info generali bot*⚡\n\n"
@@ -221,11 +223,17 @@ async def war_info_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     if war_info and 'state' in war_info:
         if war_info['state'] == 'notInWar':
             await update.message.reply_text("🔍Il clan non è attualmente in guerra.")
+        elif war_info['state'] == 'preparation':
+            message = (
+                f"⌛Giorno dei preparativi contro: *{war_info['opponent']['name']}*\n\n"
+                f"👥Giocatori: *{len(war_info['clan']['members'])}* vs *{len(war_info['opponent']['members'])}*\n\n"
+            )
+            await update.message.reply_text(message, parse_mode='Markdown')
         else:
             message = (
-                f"War contro: *{war_info['opponent']['name']}*\n"
-                f"Giocatori: *{len(war_info['clan']['members'])}* vs *{len(war_info['opponent']['members'])}*\n\n"
-                f"Punteggio attuale: *{war_info['clan']['stars']}* vs *{war_info['opponent']['stars']}*"
+                f"🗡️War contro: *{war_info['opponent']['name']}*\n"
+                f"👥Giocatori: *{len(war_info['clan']['members'])}* vs *{len(war_info['opponent']['members'])}*\n\n"
+                f"📈Punteggio attuale: *{war_info['clan']['stars']}* vs *{war_info['opponent']['stars']}*"
             )
             await update.message.reply_text(message, parse_mode='Markdown')
     else:
