@@ -11,5 +11,5 @@ def admin_required(func):
         if user_id in ADMIN_LIST:
             return await func(update, context)
         else:
-            await update.message.reply_text("Per utilizzare questo comando devi essere un amministratore!")
+            await update.message.reply_text("*⛔Non hai i permessi sufficienti per eseguire il comando.*", parse_mode='Markdown')
     return wrapper
