@@ -1,8 +1,8 @@
 import os
 
-PASSWORD = "desmondcaposupremo"
+PASSWORD = ""
 REGISTERED_USERS_FILE = "registered_users.txt"
-EXEMPT_GROUP_IDS = [-1002247603335, -1002134951076]  # Sostituisci con gli ID dei tuoi gruppi
+EXEMPT_GROUP_IDS = []  # Sostituisci con gli ID dei tuoi gruppi
 
 def is_user_registered(user_id):
     if not os.path.exists(REGISTERED_USERS_FILE):

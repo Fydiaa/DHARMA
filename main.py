@@ -240,22 +240,6 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-#/info
-@login_required
-async def infobot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    message = (
-    "⚡*Info generali bot*⚡\n\n"
-    "*Stato memoria*: ✅\n"
-    "*Stato connessione API*: ✅\n"
-    "*Stato server Clash Of Clans*: ✅\n"
-    "*Stato richiesta base_url*: 🔄\n"
-    "*Amazon Web Services*: 🔄\n"
-    "*RoyaleAPI Proxy*: ✅\n"
-    "*Python version*: `3.12.1`\n"
-    "*Level logging*: `INFO(), WARNING`\n\n\n"
-    "📄 [Cliccami](https://github.com/Fydiaa/DHARMA) *per aprire il repository del bot sul mio profilo GitHub e visualizzare il codice.*"
-    )
-    await update.message.reply_text(message, parse_mode="Markdown")
     
 #/id
 @login_required
@@ -438,8 +422,7 @@ def main() -> None:
 
     application.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
     application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("broadcast", broadcast))
-    application.add_handler(CommandHandler("info", infobot))   
+    application.add_handler(CommandHandler("broadcast", broadcast))  
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("utils", utils))
     application.add_handler(CommandHandler("login", login))

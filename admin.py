@@ -1,7 +1,7 @@
 # admin.py
 
 # Lista degli amministratori
-ADMIN_LIST = [129971898]  # Esempio di ID di amministratori
+ADMIN_LIST = []  # Esempio di ID di amministratori
 
 # Decoratore per controllare se l'utente è un amministratore
 def admin_required(func):

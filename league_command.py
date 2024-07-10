@@ -8,7 +8,7 @@ from DATA import lost_tag
 async def get_league_info():
     coc_client = coc.Client()
     try:
-        await coc_client.login(email="fedestefanini@gmail.com", password=".pamyMZ#u5ivP3@")
+        await coc_client.login(email="", password="")
         
         # Recupera il gruppo della lega del clan
         league_group = await coc_client.get_league_group(lost_tag)
